@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  backend:
+    image: maven:3-openjdk-17
+    working_dir: /app
+    volumes:
+      - ./back-end:/app
+    command: >
+      sh -c "mvn site && mvn exec:exec"
+    ports:
+      - "8080:8080"
+    environment:
+      - BACKEND=backend
+
+  frontend:
+    image: node:alpine
+    working_dir: /app
+    volumes:
+      - ./front-end:/app
+    command: >
+      sh -c "npm config set proxy "http://localhost:8080" && npm install && npm start"
+    ports:
+      - "3000:3000"
